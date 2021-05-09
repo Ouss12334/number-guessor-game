@@ -21,6 +21,9 @@ function connect() {
         stompClient.subscribe('/topic/greetings', function (greeting) {
             showGreeting(JSON.parse(greeting.body).content);
         });
+        stompClient.subscribe('/topic/guess', function (match) {
+            showMatch(JSON.parse(match.body).correspondence);
+        });
     });
 }
 
@@ -33,11 +36,25 @@ function disconnect() {
 }
 
 function sendName() {
-    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
+    var name = $("#name");
+    stompClient.send("/app/hello", {}, JSON.stringify({'name': name.val()}));
+    name.val('')
+}
+
+function sendGuess() {
+    var guess = $("#guess")
+    stompClient.send("/app/guess", {}, JSON.stringify({'number': guess.val()}));
+    guess.val('')
 }
 
 function showGreeting(message) {
     $("#greetings").append("<tr><td>" + message + "</td></tr>");
+    $("#form-hello").hide();
+    $("#form-guess").show();
+}
+
+function showMatch(message) {
+    $("#guess-match").append("<tr><td>" + message + "</td></tr>");
 }
 
 $(function () {
@@ -47,4 +64,12 @@ $(function () {
     $( "#connect" ).click(function() { connect(); });
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendName(); });
+    $( "#send-guess" ).click(function() { sendGuess(); });
+    $('#guess').on("input drop", function() {
+        if (!this.value.match(/^\d{0,4}$/)){
+            console.log("replacing invalid char")
+            $("#guess").val(this.value.replace(/.$/, ''));
+        }
+    })
+    $("#form-guess").hide();
 });

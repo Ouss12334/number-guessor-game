@@ -3,7 +3,7 @@ package com.generator.randomgeneratorgame.model;
 import lombok.Data;
 
 @Data
-public class HelloMessage {
+public class User {
 
     private String name;
 }
