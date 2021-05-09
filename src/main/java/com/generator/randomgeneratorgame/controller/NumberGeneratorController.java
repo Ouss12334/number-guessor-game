@@ -10,6 +10,9 @@ import org.springframework.stereotype.Controller;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.generator.randomgeneratorgame.service.GeneratorService.generateRandom;
+import static com.generator.randomgeneratorgame.service.GeneratorService.shuffleLetters;
+
 @Slf4j
 @Controller
 public class NumberGeneratorController {
@@ -18,20 +21,7 @@ public class NumberGeneratorController {
     private static final String WIN = "TTTT";
 
     static {
-        generateRandom();
-    }
-
-    private static void generateRandom() {
-        Set<Long> numbers = new LinkedHashSet<>();
-        while (numbers.size() < 4) {
-            long nb = Math.round(Math.random() * 10);
-            if (numbers.size() == 0 && nb != 0)
-                numbers.add(nb);
-            else if (!numbers.contains(nb))
-                numbers.add(nb);
-        }
-        number = numbers.stream().map(Object::toString).collect(Collectors.joining(""));
-        log.debug("generated number {}", number);
+        number = generateRandom();
     }
 
     @MessageMapping("/guess")
@@ -56,9 +46,11 @@ public class NumberGeneratorController {
             }
         }
         // new number
-        if (match.getCorrespondence().equals(WIN)) {
+        if (match.getCorrespondence().equals(WIN))
             generateRandom();
-        }
+        else
+            match.setCorrespondence(shuffleLetters(match.getCorrespondence()));
         return match;
     }
+
 }

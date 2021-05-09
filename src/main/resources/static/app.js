@@ -66,8 +66,9 @@ $(function () {
     $( "#send" ).click(function() { sendName(); });
     $( "#send-guess" ).click(function() { sendGuess(); });
     $('#guess').on("input drop", function() {
-        if (!this.value.match(/^\d{0,4}$/)){
-            console.log("replacing invalid char")
+        if (!this.value.match(/^\d{0,4}$/) || this.value.split("").some(function(v,i,a){
+            return (a.lastIndexOf(v)!=i)})) {
+            console.log("replacing invalid/duplicate char")
             $("#guess").val(this.value.replace(/.$/, ''));
         }
     })
