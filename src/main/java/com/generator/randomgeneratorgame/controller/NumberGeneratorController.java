@@ -2,10 +2,15 @@ package com.generator.randomgeneratorgame.controller;
 
 import com.generator.randomgeneratorgame.model.Guess;
 import com.generator.randomgeneratorgame.model.Match;
+import com.generator.randomgeneratorgame.prstc.HumanService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,10 +20,12 @@ import static com.generator.randomgeneratorgame.service.GeneratorService.shuffle
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class NumberGeneratorController {
 
     private static String number;
     private static final String WIN = "TTTT";
+    private final HumanService humanService;
 
     static {
         number = generateRandom();
@@ -26,9 +33,10 @@ public class NumberGeneratorController {
 
     @MessageMapping("/guess")
     @SendTo("/topic/guess")
-    public Match guess(Guess guess) {
+    public Match guess(Guess guess, @Header("simpSessionId") String sessionId) {
+        log.debug("session Id {} ", sessionId);
         Match match = new Match();
-        log.info("received number {}", guess.getNumber());
+        log.debug("received number {}", guess.getNumber());
         String noMatch = "0";
         match.setCorrespondence(noMatch);
         char[] number = guess.getNumber().toCharArray();
@@ -46,8 +54,11 @@ public class NumberGeneratorController {
             }
         }
         // new number
-        if (match.getCorrespondence().equals(WIN))
+        if (match.getCorrespondence().equals(WIN)) {
             generateRandom();
+            match.setWinner(humanService.getUser(sessionId));
+            match.setNumber(NumberGeneratorController.number);
+        }
         else
             match.setCorrespondence(shuffleLetters(match.getCorrespondence()));
         return match;

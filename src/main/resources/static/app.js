@@ -22,6 +22,9 @@ function connect() {
             showGreeting(JSON.parse(greeting.body).content);
         });
         stompClient.subscribe('/topic/guess', function (match) {
+            if (match.winner !== undefined) {
+                showMatch(match.winner + ' WON!!!!! he found the number ' + match.number + ', throw an apple at his ass!')
+            }
             showMatch(JSON.parse(match.body).correspondence);
         });
     });
@@ -36,6 +39,7 @@ function disconnect() {
 }
 
 function sendName() {
+    connect();
     var name = $("#name");
     stompClient.send("/app/hello", {}, JSON.stringify({'name': name.val()}));
     name.val('')
