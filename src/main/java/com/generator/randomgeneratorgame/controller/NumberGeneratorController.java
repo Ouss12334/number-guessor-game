@@ -10,10 +10,6 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.generator.randomgeneratorgame.service.GeneratorService.generateRandom;
 import static com.generator.randomgeneratorgame.service.GeneratorService.shuffleLetters;
@@ -34,9 +30,9 @@ public class NumberGeneratorController {
     @MessageMapping("/guess")
     @SendTo("/topic/guess")
     public Match guess(Guess guess, @Header("simpSessionId") String sessionId) {
-        log.debug("session Id {} ", sessionId);
+        //log.debug("session Id {} ", sessionId);
         Match match = new Match();
-        log.debug("received number {}", guess.getNumber());
+        //log.debug("received number {}", guess.getNumber());
         String noMatch = "0";
         match.setCorrespondence(noMatch);
         char[] number = guess.getNumber().toCharArray();
@@ -56,7 +52,7 @@ public class NumberGeneratorController {
         // new number
         if (match.getCorrespondence().equals(WIN)) {
             generateRandom();
-            match.setWinner(humanService.getUser(sessionId));
+            match.setUsername(humanService.getUser(sessionId));
             match.setNumber(NumberGeneratorController.number);
         }
         else

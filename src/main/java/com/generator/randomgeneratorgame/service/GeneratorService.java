@@ -26,7 +26,7 @@ public interface GeneratorService {
         String number = "";
         Set<Long> numbers = new LinkedHashSet<>();
         while (numbers.size() < 4) {
-            long nb = Math.round(Math.random() * 10);
+            long nb = Math.round(Math.random() * 9);
             if (numbers.size() == 0 && nb != 0)
                 numbers.add(nb);
             else if (!numbers.contains(nb))

@@ -4,30 +4,40 @@ function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
     if (connected) {
-        $("#conversation").show();
+        $(".table-conversation").show();
     }
     else {
-        $("#conversation").hide();
+        $(".table-conversation").hide();
     }
     $("#greetings").html("");
 }
 
 function connect() {
-    var socket = new SockJS('/gs-guide-websocket');
-    stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
-        setConnected(true);
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/greetings', function (greeting) {
-            showGreeting(JSON.parse(greeting.body).content);
+    return new Promise(function(resolve, reject) {
+        var socket = new SockJS('/gs-guide-websocket');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            setConnected(true);
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/greetings', function (greeting) {
+                var players = JSON.parse(greeting.body);
+                $("#greetings").empty();
+                players.forEach(function (player) {
+                    showGreeting(player.content)
+                })
+            });
+            stompClient.subscribe('/topic/guess', function (match) {
+                var parsedmatch = JSON.parse(match.body);
+                if (parsedmatch.number) {
+                    showMatch(parsedmatch.username + ' won! he found the number ' + parsedmatch.number)
+                    showMatch("a new game has started, guess again!")
+                }
+                else
+                    showMatch(parsedmatch.username + ': ' + parsedmatch.correspondence);
+            });
+            resolve();
         });
-        stompClient.subscribe('/topic/guess', function (match) {
-            if (match.winner !== undefined) {
-                showMatch(match.winner + ' WON!!!!! he found the number ' + match.number + ', throw an apple at his ass!')
-            }
-            showMatch(JSON.parse(match.body).correspondence);
-        });
-    });
+    })
 }
 
 function disconnect() {
@@ -39,7 +49,6 @@ function disconnect() {
 }
 
 function sendName() {
-    connect();
     var name = $("#name");
     stompClient.send("/app/hello", {}, JSON.stringify({'name': name.val()}));
     name.val('')
@@ -67,14 +76,14 @@ $(function () {
     });
     $( "#connect" ).click(function() { connect(); });
     $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#send" ).click(function() { sendName(); });
+    $( "#send" ).click(function() { connect().then(sendName) });
     $( "#send-guess" ).click(function() { sendGuess(); });
     $('#guess').on("input drop", function() {
         if (!this.value.match(/^\d{0,4}$/) || this.value.split("").some(function(v,i,a){
             return (a.lastIndexOf(v)!=i)})) {
-            console.log("replacing invalid/duplicate char")
+            console.log("replacing invalid/duplicate char");
             $("#guess").val(this.value.replace(/.$/, ''));
         }
-    })
+    });
     $("#form-guess").hide();
 });

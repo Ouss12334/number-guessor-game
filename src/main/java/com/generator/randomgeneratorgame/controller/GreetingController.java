@@ -12,6 +12,9 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.util.HtmlUtils;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -21,9 +24,11 @@ public class GreetingController {
 
     @MessageMapping("/hello")
     @SendTo("/topic/greetings")
-    public Greeting greeting(User helloMessage, @Header("simpSessionId") String sessionId) throws InterruptedException {
+    public List<Greeting> greeting(User helloMessage, @Header("simpSessionId") String sessionId) throws InterruptedException {
         log.debug("session id {}", sessionId);
-        humanService.create(helloMessage.getName(), sessionId);
-        return new Greeting("Hello " + HtmlUtils.htmlEscape(helloMessage.getName() + "!"));
+        humanService.create(HtmlUtils.htmlEscape(helloMessage.getName()), sessionId);
+        return humanService.getSessions().stream()
+                .map(Greeting::new)
+                .collect(Collectors.toList());
     }
 }
