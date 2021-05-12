@@ -26,14 +26,18 @@ function connect() {
                     showGreeting(player.content)
                 })
             });
-            stompClient.subscribe('/topic/guess', function (match) {
-                var parsedmatch = JSON.parse(match.body);
-                if (parsedmatch.number) {
-                    showMatch(parsedmatch.username + ' won! he found the number ' + parsedmatch.number)
+            stompClient.subscribe('/topic/guess', function (score) {
+                var parsedscore = JSON.parse(score.body);
+                if (parsedscore.number) {
+                    showMatch(parsedscore.username + ' won! he found the number ' + parsedscore.number)
                     showMatch("a new game has started, guess again!")
                 }
-                else
-                    showMatch(parsedmatch.username + ': ' + parsedmatch.correspondence);
+                else {
+                    var match = parsedscore.correspondence;
+                    if (match === '0')
+                        match = 'none';
+                    showMatch('<b>' + parsedscore.username + ':</b> ' + match);
+                }
             });
             resolve();
         });

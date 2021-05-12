@@ -52,11 +52,12 @@ public class NumberGeneratorController {
         // new number
         if (match.getCorrespondence().equals(WIN)) {
             generateRandom();
-            match.setUsername(humanService.getUser(sessionId));
             match.setNumber(NumberGeneratorController.number);
         }
         else
             match.setCorrespondence(shuffleLetters(match.getCorrespondence()));
+        // get name
+        match.setUsername(humanService.getUser(sessionId));
         return match;
     }
 
