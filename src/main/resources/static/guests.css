@@ -1,0 +1,34 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans&display=swap");
+
+.guests_list_name {
+    padding: 0 0 0 10px;
+    position: relative;
+}
+
+.guests_list_icon {
+    position: absolute;
+    padding: 10px 0 0 0;
+}
+
+.guests_section {
+    padding: 11px 20px;
+}
+
+.guests_history_list {
+    list-style: georgian inside;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 80%;
+    overflow: auto;
+}
+
+.guests_history_list_item {
+    margin-top: auto;
+    margin-bottom: 5px;
+    max-width: max-content;
+    width: 100%;
+    border-radius: 15px;
+    padding: 10px 20px;
+}

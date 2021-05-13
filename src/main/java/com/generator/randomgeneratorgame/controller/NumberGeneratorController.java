@@ -58,6 +58,7 @@ public class NumberGeneratorController {
             match.setCorrespondence(shuffleLetters(match.getCorrespondence()));
         // get name
         match.setUsername(humanService.getUser(sessionId));
+        match.setSessionId(sessionId);
         return match;
     }
 

@@ -1,3 +1,7 @@
+@import "login.css";
+@import "chatroom.css";
+@import "guests.css";
+
 html, body {
     margin: 0;
 }

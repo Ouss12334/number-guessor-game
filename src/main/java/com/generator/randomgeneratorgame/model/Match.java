@@ -11,4 +11,6 @@ public class Match {
     private String username;
 
     private String number;
+
+    private String sessionId;
 }

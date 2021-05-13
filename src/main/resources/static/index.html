@@ -4,8 +4,8 @@
     <title>Hello WebSocket Guess game</title>
     <!-- css -->
     <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="/main.css" rel="stylesheet">
-    <link href="login.css" rel="stylesheet">
     <!-- js -->
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
@@ -25,7 +25,7 @@
     </hgroup>
     <form method = "post" class = "log-form">
         <div class="group log-input">
-            <input type="text" id = "name" name = "name" class="input-name" required/>
+            <input type="text" id = "name" name = "name" class="input-name" required />
 
             <span class="floating-label">your name</span>
         </div>
@@ -69,26 +69,27 @@
     </div>
     <div class="row">
         <div class="col-md-9">
-            <table id="conversation" class="table table-striped table-conversation">
-                <thead>
-                <tr>
-                    <th>Guess</th>
-                </tr>
-                </thead>
-                <tbody id="guess-match">
-                </tbody>
-            </table>
+            <div class="chatroom">
+                <div class="chatroom_section chatroom_header">
+                    <div class="chatroom_section chatroom_header_name"><span class="material-icons">emoji_objects</span>Guess</div>
+                </div>
+                <div class="chatroom_section chatroom_history">
+                    <ul class="chatroom_history_list" id="guess-match">
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="col-md-3">
-            <table class="table table-striped table-conversation">
-                <thead>
-                <tr>
-                    <th>Players</th>
-                </tr>
-                </thead>
-                <tbody id="greetings">
-                </tbody>
-            </table>
+            <div class="chatroom">
+                <div class="guests_section chatroom_header">
+                    <span class="guests_list_icon material-icons">groups</span>
+                    <div class="guests_section chatroom_header_name"><span class="guests_list_name">Players</span></div>
+                </div>
+                <div class="chatroom_section chatroom_history">
+                    <ul class="guests_history_list" id="greetings">
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>
