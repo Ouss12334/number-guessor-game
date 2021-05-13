@@ -51,8 +51,8 @@ public class NumberGeneratorController {
         }
         // new number
         if (match.getCorrespondence().equals(WIN)) {
-            generateRandom();
             match.setNumber(NumberGeneratorController.number);
+            NumberGeneratorController.number = generateRandom();
         }
         else
             match.setCorrespondence(shuffleLetters(match.getCorrespondence()));

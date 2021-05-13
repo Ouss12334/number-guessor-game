@@ -1,4 +1,4 @@
-var stompClient = null;
+let stompClient = null;
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -14,28 +14,28 @@ function setConnected(connected) {
 
 function connect() {
     return new Promise(function(resolve, reject) {
-        var socket = new SockJS('/gs-guide-websocket');
+        const socket = new SockJS('/gs-guide-websocket');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             setConnected(true);
             console.log('Connected: ' + frame);
             stompClient.subscribe('/topic/greetings', function (greeting) {
-                var players = JSON.parse(greeting.body);
+                const players = JSON.parse(greeting.body);
                 $("#greetings").empty();
                 players.forEach(function (player) {
                     showGreeting(player.content)
                 })
             });
             stompClient.subscribe('/topic/guess', function (score) {
-                var parsedscore = JSON.parse(score.body);
+                const parsedscore = JSON.parse(score.body);
                 if (parsedscore.number) {
-                    showMatch(parsedscore.username + ' won! he found the number ' + parsedscore.number)
-                    showMatch("a new game has started, guess again!")
+                    showMatch('<b>' + parsedscore.username + '</b> won! he found the number <b>' + parsedscore.number + '</b>')
+                    showMatch("a new game has started, <b>guess again!</b>")
                 }
                 else {
-                    var match = parsedscore.correspondence;
+                    let match = parsedscore.correspondence;
                     if (match === '0')
-                        match = 'none';
+                        match = 'nothing';
                     showMatch('<b>' + parsedscore.username + ':</b> ' + match);
                 }
             });
@@ -53,21 +53,23 @@ function disconnect() {
 }
 
 function sendName() {
-    var name = $("#name");
+    let name = $("#name");
     stompClient.send("/app/hello", {}, JSON.stringify({'name': name.val()}));
     name.val('')
+    $("#login").toggle();
+    $("#main-content").toggle();
 }
 
 function sendGuess() {
-    var guess = $("#guess")
+    const guess = $("#guess");
     stompClient.send("/app/guess", {}, JSON.stringify({'number': guess.val()}));
     guess.val('')
 }
 
 function showGreeting(message) {
     $("#greetings").append("<tr><td>" + message + "</td></tr>");
-    $("#form-hello").hide();
-    $("#form-guess").show();
+    // $("#form-hello").hide();
+    // $("#form-guess").show();
 }
 
 function showMatch(message) {
@@ -89,5 +91,6 @@ $(function () {
             $("#guess").val(this.value.replace(/.$/, ''));
         }
     });
-    $("#form-guess").hide();
+    // $("#form-guess").hide();
+    $("#main-content").hide();
 });

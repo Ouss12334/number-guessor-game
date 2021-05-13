@@ -4,7 +4,7 @@
  */
 
 let flocks = [];
-let alignSlider = 0, cohesionSlider = 0, separationSlider = 0;
+let alignSlider, cohesionSlider, separationSlider;
 
 class Particle {
     constructor() {
@@ -125,12 +125,9 @@ class Particle {
         let cohesionSteering = this.cohesion(flocks)
         let separationSteering = this.separation(flocks)
 
-        // alignSteering.mult(alignSlider.value())
-        // cohesionSteering.mult(cohesionSlider.value())
-        // separationSteering.mult(separationSlider.value())
-        alignSteering.mult(alignSlider)
-        cohesionSteering.mult(cohesionSlider)
-        separationSteering.mult(separationSlider)
+        alignSteering.mult(alignSlider.value())
+        cohesionSteering.mult(cohesionSlider.value())
+        separationSteering.mult(separationSlider.value())
 
         this.acceleration.add(alignSteering)
         this.acceleration.add(cohesionSteering)
@@ -158,9 +155,9 @@ class Particle {
 
 function setup() {
     createCanvas(windowWidth, windowHeight)
-    // alignSlider = createSlider(0, 2, 1.2, 0.1);
-    // cohesionSlider = createSlider(0, 2, 1.5, 0.1);
-    // separationSlider = createSlider(0, 2, 1.8, 0.1);
+    alignSlider = createSlider(0, 2, 1.2, 0.1);
+    cohesionSlider = createSlider(0, 2, 1.5, 0.1);
+    separationSlider = createSlider(0, 2, 1.8, 0.1);
 
     for (let i = 0; i < 150; i++) {
         flocks.push(new Particle())
@@ -169,7 +166,7 @@ function setup() {
 
 function draw() {
     //393e46
-    background('#393e46')
+    background('#fffafa')
 
     for (let p of flocks) {
         p.edges()
