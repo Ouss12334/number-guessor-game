@@ -1,21 +1,10 @@
 let stompClient = null;
 
-// function setConnected(connected) {
-//     $("#connect").prop("disabled", connected);
-//     $("#disconnect").prop("disabled", !connected);
-//     // if (connected) {
-//     //     $(".table-conversation").show();
-//     // }
-//     // else {
-//     //     $(".table-conversation").hide();
-//     // }
-//     $("#greetings").html("");
-// }
-
 function connect() {
     return new Promise(function(resolve, reject) {
         const socket = new SockJS('/gs-guide-websocket');
         stompClient = Stomp.over(socket);
+        stompClient.debug = null
         stompClient.connect({}, function (frame) {
             // setConnected(true);
             // console.log('Connected: ' + frame);
@@ -51,14 +40,6 @@ function connect() {
         });
     })
 }
-
-// function disconnect() {
-//     if (stompClient !== null) {
-//         stompClient.disconnect();
-//     }
-//     setConnected(false);
-//     console.log("Disconnected");
-// }
 
 function sendName() {
     return new Promise(function(resolve, reject) {
@@ -114,6 +95,4 @@ $(function () {
             $("#guess").val(this.value.replace(/.$/, ''));
         }
     });
-    // $("#form-guess").hide();
-    // $("#main-content").hide();
 });
