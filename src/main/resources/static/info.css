@@ -18,11 +18,11 @@
 
 .info-list li {
     font-size: 13px;
-    line-height: 20px;
+    line-height: 15px;
     list-style: none;
     border-bottom: 1px solid #f4f4f4;
     padding-inline-start: 0;
-    padding: 10px;
+    padding: 5px;
 }
 
 .info-list {
