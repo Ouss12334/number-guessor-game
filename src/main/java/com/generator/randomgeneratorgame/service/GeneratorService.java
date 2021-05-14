@@ -32,7 +32,7 @@ public interface GeneratorService {
                 numbers.add(nb);
         }
         number = numbers.stream().map(Object::toString).collect(Collectors.joining(""));
-        log.debug("generated number {}", number);
+        log.info("generated number {}", number);
         return number;
     }
 
