@@ -32,3 +32,12 @@
     border-radius: 15px;
     padding: 10px 20px;
 }
+
+.guests_score_item {
+    padding: 10px;
+}
+
+.guests_item_container {
+    display: flex;
+    justify-content: space-between;
+}

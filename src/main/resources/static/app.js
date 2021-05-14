@@ -18,8 +18,8 @@ function connect() {
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             // setConnected(true);
-            console.log('Connected: ' + frame);
-            const sessionId = socket._transport.url.split('/')[5]
+            // console.log('Connected: ' + frame);
+            const sessionId = socket._transport.url.split('/')[5];
             stompClient.subscribe('/topic/greetings', function (greeting) {
                 const players = JSON.parse(greeting.body);
                 $("#greetings").empty();
@@ -80,7 +80,7 @@ function sendGuess() {
 }
 
 function showGreeting(message, score) {
-    $("#greetings").append("<li class=\"guests_history_list_item\">" + message + ": " + score + "</li>");
+    $("#greetings").append("<div class='guests_item_container'><li class=\"guests_history_list_item\">" + message + ":</li><span class='guests_score_item'>" + score + "</span></div>");
 }
 
 function showMatch(message, isMe) {
