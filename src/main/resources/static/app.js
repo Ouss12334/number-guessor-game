@@ -61,24 +61,26 @@ function connect() {
 // }
 
 function sendName() {
-    let name = $("#name");
-    stompClient.send("/app/hello", {}, JSON.stringify({'name': name.val()}));
-    name.val('')
-    $("#login").toggle();
-    $("#main-content").toggle();
+    return new Promise(function(resolve, reject) {
+        let name = $("#name");
+        stompClient.send("/app/hello", {}, JSON.stringify({'name': name.val()}));
+        name.val('')
+        $("#login").toggle();
+        $("#main-content").css("visibility", "visible");
+        resolve();
+    });
 }
 
 function sendGuess() {
     const guess = $("#guess");
-    stompClient.send("/app/guess", {}, JSON.stringify({'number': guess.val()}));
-    guess.val('')
+    if (guess.val().length === 4) {
+        stompClient.send("/app/guess", {}, JSON.stringify({'number': guess.val()}));
+        guess.val('')
+    }
 }
 
 function showGreeting(message) {
-    // $("#greetings").append("<tr><td>" + message + "</td></tr>");
     $("#greetings").append("<li class=\"guests_history_list_item\">" + message + "</li>");
-    // $("#form-hello").hide();
-    // $("#form-guess").show();
 }
 
 function showMatch(message, isMe) {
@@ -89,11 +91,12 @@ function showMatch(message, isMe) {
 }
 
 function showWin(messageWinner, messageReset, isMe) {
+    let guessList = $("#guess-match");
     if (isMe)
-        $("#guess-match").append("<li class=\"chatroom_history_list_item chatroom_history_list_left chatroom_history_list_item--i_won\">" + messageWinner + "</li>");
+        guessList.append("<li class=\"chatroom_history_list_item chatroom_history_list_left chatroom_history_list_item--i_won\">" + messageWinner + "</li>");
     else
-        $("#guess-match").append("<li class=\"chatroom_history_list_item chatroom_history_list_left chatroom_history_list_item--he_won\">" + messageWinner + "</li>");
-    $("#guess-match").append("<li class=\"chatroom_history_list_item chatroom_history_list_left chatroom_history_list_item--reset\">" + messageReset + "</li>");
+        guessList.append("<li class=\"chatroom_history_list_item chatroom_history_list_left chatroom_history_list_item--he_won\">" + messageWinner + "</li>");
+    guessList.append("<li class=\"chatroom_history_list_item chatroom_history_list_left chatroom_history_list_item--reset\">" + messageReset + "</li>");
 }
 
 $(function () {
@@ -102,7 +105,7 @@ $(function () {
     });
     $( "#connect" ).click(function() { connect(); });
     // $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#send" ).click(function() { connect().then(sendName) });
+    $( "#send" ).click(function() { connect().then(sendName).then(writer("GUESS?",100)) });
     $( "#send-guess" ).click(function() { sendGuess(); });
     $('#guess').on("input drop", function() {
         if (!this.value.match(/^\d{0,4}$/) || this.value.split("").some(function(v,i,a){
@@ -112,6 +115,5 @@ $(function () {
         }
     });
     // $("#form-guess").hide();
-    $("#main-content").hide();
-    $("#login").toggle();
+    // $("#main-content").hide();
 });

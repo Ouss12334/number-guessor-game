@@ -1,0 +1,43 @@
+.packages {
+    margin: 0px;
+    height: auto;
+    width: 260px;
+    font-family: 'Wavehaus', cursive;
+    font-weight: 300;
+    padding: 1.5em;
+    background-color: #ffffff;
+    border: 1px solid #e7e7e7;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 19px 38px rgb(255 255 255), 0 15px 12px rgb(146 146 146 / 20%);
+    flex-wrap: wrap;
+    color: #080808;
+}
+
+.info-list li {
+    font-size: 13px;
+    line-height: 20px;
+    list-style: none;
+    border-bottom: 1px solid #f4f4f4;
+    padding-inline-start: 0;
+    padding: 10px;
+}
+
+.info-list {
+    width: 100%;
+    display: contents;
+}
+
+.package-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.pricing-title {
+    font-size: 15px;
+    font-weight: 600;
+}

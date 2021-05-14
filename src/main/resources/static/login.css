@@ -178,3 +178,7 @@ input[type="text"] {
     letter-spacing: 0.2em;
     line-height: 50px;
 }
+
+#main-content {
+    visibility: hidden;
+}

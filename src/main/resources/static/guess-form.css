@@ -1,0 +1,11 @@
+#label-guess{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #212529;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    padding-right: 5px;
+}
+
+.form-inline {
+    padding-top: 50px;
+}

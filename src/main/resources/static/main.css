@@ -1,6 +1,9 @@
 @import "login.css";
 @import "chatroom.css";
 @import "guests.css";
+@import "send-button.css";
+@import "guess-form.css";
+@import "info.css";
 
 html, body {
     margin: 0;
