@@ -4,3 +4,6 @@ number guessing game vs players made with spring websocket and basic js
 
 # deployment
 using heroku github integration
+
+### heroku
+using free version
