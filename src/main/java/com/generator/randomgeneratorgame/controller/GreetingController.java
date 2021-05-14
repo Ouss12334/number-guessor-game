@@ -27,8 +27,8 @@ public class GreetingController {
     public List<Greeting> greeting(User helloMessage, @Header("simpSessionId") String sessionId) throws InterruptedException {
         log.debug("session id {}", sessionId);
         humanService.create(HtmlUtils.htmlEscape(helloMessage.getName()), sessionId);
-        return humanService.getSessions().stream()
-                .map(Greeting::new)
+        return humanService.getNames().stream()
+                .map(human -> new Greeting(human.getUsername(), human.getScore()))
                 .collect(Collectors.toList());
     }
 }

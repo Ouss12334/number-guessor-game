@@ -1,9 +1,6 @@
 package com.generator.randomgeneratorgame.prstc.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
@@ -25,4 +22,7 @@ public class Human {
     private String messageId;
 
     private String username;
+
+    @With
+    private int score;
 }

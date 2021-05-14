@@ -8,4 +8,6 @@ import lombok.Data;
 public class Greeting {
 
     private String content;
+
+    private int score;
 }

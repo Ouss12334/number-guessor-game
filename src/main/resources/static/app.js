@@ -24,7 +24,7 @@ function connect() {
                 const players = JSON.parse(greeting.body);
                 $("#greetings").empty();
                 players.forEach(function (player) {
-                    showGreeting(player.content)
+                    showGreeting(player.content, player.score)
                 })
             });
             stompClient.subscribe('/topic/guess', function (score) {
@@ -79,8 +79,8 @@ function sendGuess() {
     }
 }
 
-function showGreeting(message) {
-    $("#greetings").append("<li class=\"guests_history_list_item\">" + message + "</li>");
+function showGreeting(message, score) {
+    $("#greetings").append("<li class=\"guests_history_list_item\">" + message + ": " + score + "</li>");
 }
 
 function showMatch(message, isMe) {
