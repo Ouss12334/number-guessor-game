@@ -24,7 +24,7 @@ public class GreetingController {
 
     @MessageMapping("/hello")
     @SendTo("/topic/greetings")
-    public List<Greeting> greeting(User helloMessage, @Header("simpSessionId") String sessionId) throws InterruptedException {
+    public List<Greeting> greeting(User helloMessage, @Header("simpSessionId") String sessionId) {
         log.debug("session id {}", sessionId);
         humanService.create(HtmlUtils.htmlEscape(helloMessage.getName()), sessionId);
         return humanService.getNames().stream()

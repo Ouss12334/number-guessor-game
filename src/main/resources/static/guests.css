@@ -33,6 +33,15 @@
     overflow: auto;
 }
 
+.my_guess_list {
+    /*list-style: "\e9ef " inside;*/
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 80%;
+    overflow: auto;
+}
+
 .guests_history_list_item {
     margin-top: auto;
     margin-bottom: 5px;

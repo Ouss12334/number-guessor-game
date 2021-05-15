@@ -39,6 +39,7 @@ function connect() {
             stompClient.subscribe('/topic/history', function (histories) {
                 const history = JSON.parse(histories.body);
                 $("#history").empty();
+                $("#my_guesses").empty();
                 history.forEach(function (score) {
                     showHistory(score)
                 })
@@ -60,11 +61,15 @@ function sendName() {
 }
 
 function sendGuess() {
-    const guess = $("#guess");
-    if (guess.val().length === 4) {
-        stompClient.send("/app/guess", {}, JSON.stringify({'number': guess.val()}));
-        guess.val('')
-    }
+    return new Promise(function (resolve) {
+        const guess = $("#guess");
+        if (guess.val().length === 4) {
+            stompClient.send("/app/guess", {}, JSON.stringify({'number': guess.val()}));
+            showMyGuesses(guess.val())
+            guess.val('')
+        }
+        resolve();
+    })
 }
 
 function showGreeting(message, score) {
@@ -73,6 +78,10 @@ function showGreeting(message, score) {
 
 function showHistory(message) {
     $("#history").append("<div class='guests_item_container'><li class=\"guests_history_list_item\">" + message + "</li></div>");
+}
+
+function showMyGuesses(message) {
+    $("#my_guesses").append("<div class='guests_item_container'><li class=\"guests_history_list_item\">" + message + "</li></div>");
 }
 
 function showMatch(message, isMe) {

@@ -39,7 +39,7 @@ public class NumberGeneratorController {
 
     @MessageMapping("/guess")
     @SendTo("/topic/guess")
-    public Match guess(Guess guess, @Header("simpSessionId") String sessionId) throws InterruptedException {
+    public Match guess(Guess guess, @Header("simpSessionId") String sessionId) {
         log.debug("session Id {}", sessionId);
         log.debug("received number {}", guess.getNumber());
         Match match = new Match();
@@ -67,6 +67,8 @@ public class NumberGeneratorController {
             numberHistoryService.create(NumberGeneratorController.number);
             // gen new
             NumberGeneratorController.number = generateRandom();
+            // send update
+            simpMessagingTemplate.convertAndSend("/topic/history", numberHistoryService.getHistory());
         } else
             match.setCorrespondence(shuffleLetters(match.getCorrespondence()));
         // get name
@@ -74,7 +76,6 @@ public class NumberGeneratorController {
         match.setSessionId(sessionId);
         // trigger sockets
         simpMessagingTemplate.convertAndSend("/topic/greetings", getScores());
-        simpMessagingTemplate.convertAndSend("/topic/history", numberHistoryService.getHistory());
         return match;
     }
 
