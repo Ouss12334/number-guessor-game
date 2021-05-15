@@ -7,6 +7,3 @@ using heroku github integration
 
 ### heroku
 using free version
-
-# todo
-- button 'gen new number' on ui
