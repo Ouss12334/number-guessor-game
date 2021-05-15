@@ -5,6 +5,7 @@ import com.generator.randomgeneratorgame.model.Guess;
 import com.generator.randomgeneratorgame.model.Match;
 import com.generator.randomgeneratorgame.model.User;
 import com.generator.randomgeneratorgame.prstc.HumanService;
+import com.generator.randomgeneratorgame.prstc.NumberHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +35,14 @@ public class NumberGeneratorController {
 
     private final HumanService humanService;
     private final SimpMessagingTemplate simpMessagingTemplate;
-    private final GreetingController greetingController;
+    private final NumberHistoryService numberHistoryService;
 
     @MessageMapping("/guess")
     @SendTo("/topic/guess")
     public Match guess(Guess guess, @Header("simpSessionId") String sessionId) throws InterruptedException {
-        //log.debug("session Id {} ", sessionId);
+        log.debug("session Id {}", sessionId);
+        log.debug("received number {}", guess.getNumber());
         Match match = new Match();
-        //log.debug("received number {}", guess.getNumber());
         String noMatch = "0";
         match.setCorrespondence(noMatch);
         char[] number = guess.getNumber().toCharArray();
@@ -62,14 +63,18 @@ public class NumberGeneratorController {
         if (match.getCorrespondence().equals(WIN)) {
             humanService.increaseScore(sessionId);
             match.setNumber(NumberGeneratorController.number);
+            // add to history
+            numberHistoryService.create(NumberGeneratorController.number);
+            // gen new
             NumberGeneratorController.number = generateRandom();
         } else
             match.setCorrespondence(shuffleLetters(match.getCorrespondence()));
         // get name
         match.setUsername(humanService.getUser(sessionId));
         match.setSessionId(sessionId);
-        // trigger socket
+        // trigger sockets
         simpMessagingTemplate.convertAndSend("/topic/greetings", getScores());
+        simpMessagingTemplate.convertAndSend("/topic/history", numberHistoryService.getHistory());
         return match;
     }
 
@@ -78,4 +83,5 @@ public class NumberGeneratorController {
                 .map(human -> new Greeting(human.getUsername(), human.getScore()))
                 .collect(Collectors.toList());
     }
+
 }

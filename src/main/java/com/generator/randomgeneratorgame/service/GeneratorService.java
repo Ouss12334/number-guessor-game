@@ -26,9 +26,9 @@ public interface GeneratorService {
         Set<Long> numbers = new LinkedHashSet<>();
         while (numbers.size() < 4) {
             long nb = Math.round(Math.random() * 9);
-            if (numbers.size() == 0 && nb != 0)
+            if (numbers.isEmpty() && nb != 0) // not start with 0
                 numbers.add(nb);
-            else if (!numbers.contains(nb))
+            else if (numbers.size() > 0 && !numbers.contains(nb))
                 numbers.add(nb);
         }
         number = numbers.stream().map(Object::toString).collect(Collectors.joining(""));

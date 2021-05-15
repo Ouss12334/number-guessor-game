@@ -36,6 +36,13 @@ function connect() {
                     showMatch('<b>' + parsedscore.username + ':</b> ' + match, isMe);
                 }
             });
+            stompClient.subscribe('/topic/history', function (histories) {
+                const history = JSON.parse(histories.body);
+                $("#history").empty();
+                history.forEach(function (score) {
+                    showHistory(score)
+                })
+            });
             resolve();
         });
     })
@@ -61,7 +68,11 @@ function sendGuess() {
 }
 
 function showGreeting(message, score) {
-    $("#greetings").append("<div class='guests_item_container'><li class=\"guests_history_list_item\">" + message + ":</li><span class='guests_score_item'>" + score + "</span></div>");
+    $("#greetings").append("<div class='guests_item_container'><li class=\"guests_history_list_item\">" + message + "</li><span class='guests_score_item'>" + score + "</span></div>");
+}
+
+function showHistory(message) {
+    $("#history").append("<div class='guests_item_container'><li class=\"guests_history_list_item\">" + message + "</li></div>");
 }
 
 function showMatch(message, isMe) {
